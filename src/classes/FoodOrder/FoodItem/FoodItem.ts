@@ -1,18 +1,20 @@
-import Ingredient from './Ingredient';
+import Ingredient from '../../Ingredient';
 
 type FoodType = 'soup' | 'sandwich' | 'donut' | 'muffin';
 export default class FoodItem {
    name: string;
    ingredients: Ingredient[];
-   foodType: FoodType;
+   readonly foodType: FoodType;
+   readonly isPlantBased: boolean;
 
    constructor(name: string, ingredients: Ingredient[], foodType: FoodType) {
       this.name = name;
       this.ingredients = ingredients;
       this.foodType = foodType;
+      this.isPlantBased = this.checkIfPlantBased();
    }
 
-   isPlantBased(): Boolean {
+   private checkIfPlantBased(): boolean {
       if (!this.ingredients.length) {
          return true;
       }
@@ -24,15 +26,17 @@ export default class FoodItem {
       return !animalBasedIngredients.length ? true : false;
    }
 
-   listIngredients(): string {
+   public listIngredients(): string {
       const ingredientNames = this.ingredients.map(ingredient => ingredient.name);
       return ingredientNames.join(', ');
    }
 
-   removeIngredient(
+   public removeIngredient(
       ingredient: Ingredient
    ): 'Ingredient removed.' | 'Ingredient not in food item.' {
-      if (!this.ingredients.includes(ingredient)) return 'Ingredient not in food item.';
+      if (!this.ingredients.includes(ingredient)) {
+         return 'Ingredient not in food item.';
+      }
 
       this.ingredients = this.ingredients.filter(soupIngredient => soupIngredient !== ingredient);
       return 'Ingredient removed.';
